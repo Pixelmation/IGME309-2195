@@ -276,7 +276,24 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	float divAngle = 2.0f * PI / (float)a_nSubdivisions;
+	float halfHeight = 0.5f * a_fHeight;
+
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		//create two points on the outside of the triangle
+		vector3 point1(a_fRadius * cos((i + 1) * divAngle), a_fRadius * sin((i + 1) * divAngle), -halfHeight);
+		vector3 point2(a_fRadius * cos(i * divAngle), a_fRadius * sin(i * divAngle), -halfHeight);
+		
+		//find the center of the base
+		vector3 centerBase(0.0f, 0.0f, -halfHeight);
+		vector3 top(0.0f, 0.0f, halfHeight);
+
+		//create tri connecting two outside points and the base
+		AddTri(point2, point1, centerBase);
+
+		//create tri connecting two outside points to the top of the cone
+		AddTri(point1, point2, top);
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -300,7 +317,27 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	float divAngle = 2.0f * PI / (float)a_nSubdivisions;
+	float halfHeight = 0.5f * a_fHeight;
+
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		//create 4 points for a quad in a circular pattern
+		vector3 point1(a_fRadius * cos((i + 1) * divAngle), a_fRadius * sin((i + 1) * divAngle), -halfHeight);
+		vector3 point2(a_fRadius * cos(i * divAngle), a_fRadius * sin(i * divAngle), -halfHeight);
+		vector3 point3(a_fRadius * cos((i + 1) * divAngle), a_fRadius * sin((i + 1) * divAngle), halfHeight);
+		vector3 point4(a_fRadius * cos(i * divAngle), a_fRadius * sin(i * divAngle), halfHeight);
+
+		//set the center of the top and bottom caps
+		vector3 bottomCenter(0.0f, 0.0f, -halfHeight);
+		vector3 topCenter(0.0f, 0.0f, halfHeight);
+
+		//create tri for the bottom cap then top cap
+		AddTri(bottomCenter, point1, point2);
+		AddTri(point4, point3, topCenter);
+		
+		//create quad on the side, creating the height
+		AddQuad(point3, point4, point1, point2);
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -330,7 +367,34 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
+	float divAngle = 2.0f * PI / (float)a_nSubdivisions;
+	float halfHeight = 0.5f * a_fHeight;
+
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		//create a quad at the outer edge around a circle shape
+		vector3 point1(a_fOuterRadius * cos((i + 1) * divAngle), a_fOuterRadius * sin((i + 1) * divAngle), -halfHeight);
+		vector3 point2(a_fOuterRadius * cos(i * divAngle), a_fOuterRadius * sin(i * divAngle), -halfHeight);
+		vector3 point3(a_fOuterRadius * cos((i + 1) * divAngle), a_fOuterRadius * sin((i + 1) * divAngle), halfHeight);
+		vector3 point4(a_fOuterRadius * cos(i * divAngle), a_fOuterRadius * sin(i * divAngle), halfHeight);
+
+		//create a quad at the inner edge around a circle shape
+		vector3 point5(a_fInnerRadius * cos((i + 1) * divAngle), a_fInnerRadius * sin((i + 1) * divAngle), -halfHeight);
+		vector3 point6(a_fInnerRadius * cos(i * divAngle), a_fInnerRadius * sin(i * divAngle), -halfHeight);
+		vector3 point7(a_fInnerRadius * cos((i + 1) * divAngle), a_fInnerRadius * sin((i + 1) * divAngle), halfHeight);
+		vector3 point8(a_fInnerRadius * cos(i * divAngle), a_fInnerRadius * sin(i * divAngle), halfHeight);
+
+		//set the center of the top and bottom
+		vector3 bottomCenter(0.0f, 0.0f, -halfHeight);
+		vector3 topCenter(0.0f, 0.0f, halfHeight);
+
+		// create the connecting quads on top and bottom
+		AddQuad(point1, point2, point5, point6);
+		AddQuad(point4, point3, point8, point7);
+
+		// create the outer and inner quads
+		AddQuad(point3, point4, point1, point2);
+		AddQuad(point5, point6, point7, point8);
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -362,6 +426,7 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	Init();
 
 	// Replace this with your code
+	//Yeah no I just couldn't figure this one out, like, at all and I ran out of time
 	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
 	// -------------------------------
 
@@ -386,9 +451,77 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	Release();
 	Init();
 
+
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	// list to store all the vertices on a sphere
+	std::vector<vector3> vertices;	
+	// vertex positions
+	float x;
+	float y;
+	float z;
+	float xy;
+
+	int stackCount = a_nSubdivisions * 3;
+	int sectorCount = stackCount;
+
+	float stackAngle;
+	float sectorAngle;
+	float stackStep = PI / stackCount;
+	float sectorStep = 2 * PI / sectorCount;
+	float r = a_fRadius;
+
+	//Find vertices and store them in the vector list
+	for (int i = 0; i <= stackCount; i++) {
+		stackAngle = PI / 2 - i * stackStep;
+		xy = r * cos(stackAngle);
+		z = r * sin(stackAngle);
+
+		for (int j = 0; j <= sectorCount; j++) {
+			sectorAngle = j * sectorStep;
+
+			// Calculate vector3(x, y, z)
+			x = xy * cos(sectorAngle);
+			y = xy * sin(sectorAngle);
+
+			vector3 point(x, y, z);
+			vertices.push_back(point);
+		}
+	}
+
+	//Find out vertices groups to form triangles
+	// indices
+	int k1, k2;
+
+	for (int i = 0; i < stackCount; i++) {
+		// beginning of current stack row on sphere
+		k1 = i * (sectorCount + 1);
+		// beginning of the next stack row on sphere
+		k2 = (i + 1) * (sectorCount + 1);
+
+		for (int j = 0; j < sectorCount; j++, k1++, k2++) {
+			// get 4 vertices per sector by looping through in sequence
+			vector3 v1 = vertices[k1];
+			vector3 v2 = vertices[k2];
+			vector3 v3 = vertices[k1 + 1];
+			vector3 v4 = vertices[k2 + 1];
+
+			// 1st stack stores only 1 triangle per sector
+			if (i == 0) {
+				AddTri(v1, v2, v4);
+			}
+			// One triangle at the end to create the circular top and bottom
+			else if (i == stackCount - 1) {
+				AddTri(v1, v2, v3);
+			}
+			// use a quad instead for the rest of the sphere
+			else {
+				AddQuad(v2, v4, v1, v3);
+			}
+		}
+	}
 	// -------------------------------
+
+	//I found http://www.songho.ca/opengl/gl_sphere.html which helped greatly with figuring the circle out
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
