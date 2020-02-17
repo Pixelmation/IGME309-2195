@@ -2,7 +2,7 @@
 void Application::InitVariables(void)
 {
 	//Change this to your name and email
-	m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
+	m_sProgrammer = "Nick Valcour - nxv9963@rit.edu";
 
 	//Set the position and target of the camera
 	m_pCameraMngr->SetPositionTargetAndUpward(vector3(5.0f,3.0f,15.0f), ZERO_V3, AXIS_Y);
@@ -52,24 +52,45 @@ void Application::Display(void)
 	fTimer += m_pSystem->GetDeltaTime(uClock); //get the delta time for that timer
 
 	//calculate the current position
-	vector3 v3CurrentPos;
-	
+	vector3 v3CurrentPos = vector3(0.0f, 0.0f, 0.0f);
 
+	//Origin point
+	vector3 Start;
+	//point being moved to
+	vector3 End;
 
+	//int for storing the index of the next position
+	static int path = 0;
 
+	Start = m_stopsList[path];
+	End = m_stopsList[(path + 1) % m_stopsList.size()];
 
-	//your code goes here
-	v3CurrentPos = vector3(0.0f, 0.0f, 0.0f);
-	//-------------------
-	
+	//how long between stops
+	float fMoveTime = 1.0f;
+	float fPercetage = MapValue(fTimer, 0.0f, fMoveTime, 0.0f, 1.0f);
 
+	//lerps between the start and end points by the percentage
+	v3CurrentPos = glm::lerp(Start, End, fPercetage);
 
-	
+	//moves the model to the new pos
 	matrix4 m4Model = glm::translate(v3CurrentPos);
 	m_pModel->SetModelMatrix(m4Model);
 
-	m_pMeshMngr->Print("\nTimer: ");//Add a line on top
+	//once we reach 100%, restart with the next position
+	if (fPercetage >= 1.0f) {
+		path++;
+		fTimer = m_pSystem->GetDeltaTime(uClock);
+		path %= m_stopsList.size();
+	}
+
+	m_pMeshMngr->Print("\nTimer: ");
 	m_pMeshMngr->PrintLine(std::to_string(fTimer), C_YELLOW);
+
+
+	
+	m4Model = glm::translate(v3CurrentPos);
+	m_pModel->SetModelMatrix(m4Model);
+
 
 	// Draw stops
 	for (uint i = 0; i < m_stopsList.size(); ++i)
