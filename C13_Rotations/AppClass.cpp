@@ -33,7 +33,7 @@ void Application::Display(void)
 	float fTimer = m_pSystem->GetTimeSinceStart(uClock);
 
 	//calculate the current position
-	matrix4 m4Rotation = glm::rotate(IDENTITY_M4, glm::radians(fTimer * 60.0f), vector3(0.0f, 0.0f, 1.0f));
+	matrix4 m4Rotation = glm::rotate(IDENTITY_M4 * 1000.0f, glm::radians(fTimer * 60.0f), vector3(0.0f, 0.0f, 1.0f));
 	matrix4 m4Model;
 	for (uint i = 0; i < 2500; ++i)
 		m4Model = m4Rotation * glm::translate(IDENTITY_M4, vector3(2.5f, 0.0f, 0.0f)) * glm::transpose(m4Rotation);
