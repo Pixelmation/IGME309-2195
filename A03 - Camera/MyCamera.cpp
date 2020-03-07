@@ -169,7 +169,7 @@ void MyCamera::MoveVertical(float a_fDistance)
 {
 	vector3 m_v3UpDist = m_v3Up * a_fDistance;
 
-	// Move in the y directions
+	//Move in the y directions
 	m_v3Position += m_v3UpDist;
 	m_v3Target += m_v3UpDist;
 	m_v3Above += m_v3UpDist;
@@ -182,7 +182,7 @@ void MyCamera::MoveSideways(float a_fDistance)
 {
 	vector3 m_v3RightDist = m_v3Right * a_fDistance;
 
-	// Move in the x directions
+	//Move in the x directions
 	m_v3Position += m_v3RightDist;
 	m_v3Target += m_v3RightDist;
 	m_v3Above += m_v3RightDist;
@@ -194,44 +194,44 @@ void MyCamera::MoveSideways(float a_fDistance)
 
 void MyCamera::ChangeYaw(float a_fDegree)
 {
-	// Rotate camera Y-axis
-	// Calculate the new forward vector
+	//Rotate camera Y-axis
+	//Calculate the new forward vector
 	m_v3Forward = glm::normalize(m_v3Forward * cosf(glm::radians(a_fDegree)) - m_v3Right * sinf(glm::radians(a_fDegree))
 	);
 
-	// Calculate the new right vector
+	//Calculate the new right vector
 	m_v3Right = glm::cross(m_v3Forward, m_v3Up);
 
-	// Update LookAt
+	//Update LookAt
 	m_v3Target = m_v3Position + m_v3Forward;
 }
 
 void MyCamera::ChangePitch(float a_fDegree)
 {
-	// Rotate camera around X-axis
-	// Calculate the new forward vector
+	//Rotate camera around X-axis
+	//Calculate the new forward vector
 	m_v3Forward = glm::normalize(m_v3Forward * cosf(glm::radians(a_fDegree)) + m_v3Up * sinf(glm::radians(a_fDegree))
 	);
 
-	// Calculate the new up vector
+	//Calculate the new up vector
 	m_v3Up = glm::cross(m_v3Forward, m_v3Right);
 	m_v3Up *= -1;
 
-	// Update LookAt
+	//Update LookAt
 	m_v3Target = m_v3Position + m_v3Forward;
 }
 
 //NOTE: This does not work in this submission!!!!!
 void MyCamera::ChangeRoll(float a_fDegree)
 {
-	// Rotate camera around Z-axis
-	// Calculate the new Up vector
+	//Rotate camera around Z-axis
+	//Calculate the new Up vector
 	m_v3Up = glm::normalize(m_v3Up * cosf(glm::radians(a_fDegree)) - m_v3Forward * sinf(glm::radians(a_fDegree))
 	);
 
-	// Calculate the new right vector
+	//Calculate the new right vector
 	m_v3Right = glm::cross(m_v3Forward, m_v3Up);
 
-	// Update LookAt
+	//Update LookAt
 	m_v3Target = m_v3Position + m_v3Forward;
 }
