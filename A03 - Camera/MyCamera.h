@@ -16,6 +16,12 @@ class MyCamera
 	vector3 m_v3Target = vector3(0.0f, 0.0f, 0.0f); //What I'm looking at
 	vector3 m_v3Above = vector3(0.0f, 1.0f, 0.0f); //What is above the camera
 
+	//the forward vector
+	vector3 m_v3Forward = vector3(0.0f, 0.0f, -1.0f);
+	vector3 m_v3Up = vector3(0.0f, 1.0f, 0.0f);
+	vector3 m_v3Right = vector3(1.0f, 0.0f, 0.0f);
+
+
 	bool m_bPerspective = true; //perspective view? False is Orthographic
 
 	float m_fFOV = 45.0f; //Field of View
@@ -219,17 +225,40 @@ public:
 	*/
 	void MoveForward(float a_fDistance = 0.1f);
 	/*
-	USAGE: Translates the camera Upward or downward
+	USAGE: Translates the camera Forward or back
 	ARGUMENTS: float a_fDistance = 0.1f -> amount of movement
 	OUTPUT: ---
 	*/
 	void MoveVertical(float a_fDistance = 0.1f);
 	/*
-	USAGE: Translates the camera right or left
+	USAGE: Translates the camera Up or down
 	ARGUMENTS: float a_fDistance = 0.1f -> amount of movement
 	OUTPUT: ---
 	*/
 	void MoveSideways(float a_fDistance = 0.1f);
+	/*
+	USAGE: Translates the camera left or right
+	ARGUMENTS: float a_fDistance = 0.1f -> amount of movement
+	OUTPUT: ---
+	*/
+	void ChangeYaw(float a_fDegree);
+	/*
+	USAGE: Rotates the camera around Y-axis(Up vector)
+	ARGUMENTS: float a_fDegree -> amount of rotation
+	OUTPUT: ---
+	*/
+	void ChangePitch(float a_fDegree);
+	/*
+	USAGE: Rotates the camera around X-axis(right vector)
+	ARGUMENTS: float a_fDegree -> amount of rotation
+	OUTPUT: ---
+	*/
+	void ChangeRoll(float a_fDegree);
+	/*
+	USAGE: Rotates the camera around Z-axis(Forward vector)
+	ARGUMENTS: float a_fDegree -> amount of rotation
+	OUTPUT: ---
+	*/
 };
 
 } //namespace Simplex
