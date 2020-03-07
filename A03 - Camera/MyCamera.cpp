@@ -154,7 +154,7 @@ void MyCamera::MoveForward(float a_fDistance)
 {
 	vector3 m_v3ForDist = m_v3Forward * a_fDistance;
 
-	//move in the z direction
+	//move in the Z directions
 	m_v3Position += m_v3ForDist;
 	m_v3Target += m_v3ForDist;
 	m_v3Above += m_v3ForDist;
@@ -169,7 +169,7 @@ void MyCamera::MoveVertical(float a_fDistance)
 {
 	vector3 m_v3UpDist = m_v3Up * a_fDistance;
 
-	//Move in the y directions
+	//Move in the Y directions
 	m_v3Position += m_v3UpDist;
 	m_v3Target += m_v3UpDist;
 	m_v3Above += m_v3UpDist;
@@ -182,7 +182,7 @@ void MyCamera::MoveSideways(float a_fDistance)
 {
 	vector3 m_v3RightDist = m_v3Right * a_fDistance;
 
-	//Move in the x directions
+	//Move in the X directions
 	m_v3Position += m_v3RightDist;
 	m_v3Target += m_v3RightDist;
 	m_v3Above += m_v3RightDist;

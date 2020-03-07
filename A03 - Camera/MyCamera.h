@@ -16,7 +16,7 @@ class MyCamera
 	vector3 m_v3Target = vector3(0.0f, 0.0f, 0.0f); //What I'm looking at
 	vector3 m_v3Above = vector3(0.0f, 1.0f, 0.0f); //What is above the camera
 
-	//the forward, Up, and Right vectors
+	//the forward, Up, and Right Vectors
 	vector3 m_v3Forward = vector3(0.0f, 0.0f, -1.0f);
 	vector3 m_v3Up = vector3(0.0f, 1.0f, 0.0f);
 	vector3 m_v3Right = vector3(1.0f, 0.0f, 0.0f);
