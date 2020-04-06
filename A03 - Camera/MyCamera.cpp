@@ -232,6 +232,7 @@ void MyCamera::ChangeRoll(float a_fDegree)
 	//Calculate the new right vector
 	m_v3Right = glm::cross(m_v3Forward, m_v3Up);
 
+
 	//Update LookAt
 	m_v3Target = m_v3Position + m_v3Forward;
 }
