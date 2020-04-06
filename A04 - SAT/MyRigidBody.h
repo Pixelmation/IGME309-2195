@@ -33,8 +33,10 @@ class MyRigidBody
 
 	vector3 c1; // 1st OBB center
 	vector3 c2; // 2st OBB center
+
 	matrix3 u1; // 1st Local x, y, z-axes
 	matrix3 u2; // 2nd local x, y, z-axes
+
 	vector3 e1; // 1st positive halfwidth extents of OBB along each axis
 	vector3 e2; // 2nd positive halfwidth extents of OBB along each axis
 

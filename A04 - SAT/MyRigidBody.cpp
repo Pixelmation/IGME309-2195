@@ -276,18 +276,6 @@ void MyRigidBody::AddToRenderList(void)
 
 uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 {
-	/*
-	Your code goes here instead of this comment;
-
-	For this method, if there is an axis that separates the two objects
-	then the return will be different than 0; 1 for any separating axis
-	is ok if you are not going for the extra credit, if you could not
-	find a separating axis you need to return 0, there is an enum in
-	Simplex that might help you [eSATResults] feel free to use it.
-	(eSATResults::SAT_NONE has a value of 0)
-	*/
-
-
 	// Set variables for the future checks
 	c1 = GetCenterGlobal();
 	c2 = a_pOther->GetCenterGlobal();
@@ -305,10 +293,6 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	u2[0] = a_pOther->m_m4ToWorld[0];
 	u2[1] = a_pOther->m_m4ToWorld[1];
 	u2[2] = a_pOther->m_m4ToWorld[2];
-
-	//matrix3 m3RotAxisInverse_A = glm::inverse(u1);
-	//matrix3 m3RotAxisInverse_B = glm::inverse(u2);
-
 
 	float ra, rb;
 	matrix3 R, AbsR;
