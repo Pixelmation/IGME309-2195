@@ -6,6 +6,7 @@ Date: 2017/07
 #define __OCTANTCLASS_H_
 
 #include "Simplex\Physics\EntityManager.h"
+#include "Simplex\Simplex.h"
 
 namespace Simplex
 {
@@ -13,6 +14,9 @@ namespace Simplex
 //System Class
 class SimplexDLL Octant
 {
+	int m_nData = 0;//number of elements in the list
+	std::vector<int> m_lData;//list of elements
+
 	static uint m_uOctantCount; //will store the number of octants instantiated
 	static uint m_uMaxLevel;//will store the maximum level an octant can go to
 	static uint m_uIdealEntityCount; //will tell how many ideal Entities this object will contain
